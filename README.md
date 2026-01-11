@@ -1,6 +1,6 @@
 # indexed-table
 
-Example macro usage (see `tests/macro_usage.rs`):
+Example macro usage (see `tests/macro_example.rs`):
 
 ```rust
 indexed_table::table! {
