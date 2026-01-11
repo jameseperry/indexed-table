@@ -51,6 +51,29 @@ macro_rules! table {
                 self.rows.remove(key)
             }
 
+            /// Mutate a row in place and update indices if indexed fields change.
+            pub fn update<F>(&mut self, key: $crate::Key, f: F) -> Option<()>
+            where
+                F: FnOnce(&mut $row),
+            {
+                struct Snapshot {
+                    $($idx_name: $idx_fty),*
+                }
+
+                let row = self.rows.get_mut(key)?;
+                let old = Snapshot {
+                    $($idx_name: row.$idx_field.clone()),*
+                };
+                f(row);
+                $(
+                    if row.$idx_field != old.$idx_name {
+                        self.$idx_name.remove(&old.$idx_name, key);
+                        self.$idx_name.insert(row, key);
+                    }
+                )*
+                Some(())
+            }
+
             pub fn rows(&self) -> &$crate::TableRows<$row> {
                 &self.rows
             }

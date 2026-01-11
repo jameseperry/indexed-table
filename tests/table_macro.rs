@@ -69,3 +69,54 @@ fn table_macro_rows_accessor_exposes_storage() {
     assert_eq!(row.foo, 9);
     assert_eq!(row.bar, "nine");
 }
+
+#[test]
+fn table_macro_update_refreshes_indices() {
+    indexed_table::table! {
+        struct UpdateTable of Row {
+            foo: i32,
+            bar: String,
+        }
+        indices {
+            idx_foo => foo: i32,
+            idx_bar => bar: String,
+        }
+    }
+
+    let mut table = UpdateTable::new();
+    let key = table.insert(Row { foo: 1, bar: "one".to_string() });
+
+    let updated = table.update(key, |row| {
+        row.foo = 2;
+        row.bar = "two".to_string();
+    });
+    assert_eq!(updated, Some(()));
+
+    assert!(table.idx_foo().find_one(&1).is_none());
+    assert!(table.idx_bar().find_one(&"one".to_string()).is_none());
+    assert_eq!(table.idx_foo().find_one(&2), Some(key));
+    assert_eq!(table.idx_bar().find_one(&"two".to_string()), Some(key));
+}
+
+#[test]
+fn table_macro_update_unindexed_field_keeps_indices() {
+    indexed_table::table! {
+        struct PartialIndexTable of Row {
+            foo: i32,
+            bar: String,
+        }
+        indices {
+            idx_foo => foo: i32,
+        }
+    }
+
+    let mut table = PartialIndexTable::new();
+    let key = table.insert(Row { foo: 5, bar: "five".to_string() });
+
+    let updated = table.update(key, |row| {
+        row.bar = "cinco".to_string();
+    });
+    assert_eq!(updated, Some(()));
+
+    assert_eq!(table.idx_foo().find_one(&5), Some(key));
+}

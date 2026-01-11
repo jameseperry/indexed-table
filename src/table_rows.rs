@@ -22,6 +22,10 @@ impl<R> TableRows<R> {
         self.rows.get(key)
     }
 
+    pub fn get_mut(&mut self, key: Key) -> Option<&mut R> {
+        self.rows.get_mut(key)
+    }
+
     pub fn iter(&self) -> slotmap::dense::Iter<'_, Key, R> {
         self.rows.iter()
     }

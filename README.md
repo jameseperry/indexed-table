@@ -36,6 +36,10 @@ Example usage:
 let key = table.insert(Blah { foo: 7, bar: "seven".into() });
 let row = table.rows().get(key).unwrap();
 let found = table.idx_foo().find_one(&7);
+table.update(key, |row| {
+    row.foo = 8;
+    row.bar = "eight".into();
+});
 ```
 
 and appropriate update functions.
@@ -55,3 +59,9 @@ Each generated `idx_*` accessor returns a read-only `&TableIndex<Row, Field>`:
 
 - `idx.find_one(&value) -> Option<Key>`: first match (duplicates allowed).
 - `idx.find_all(&value) -> Option<Vec<Key>>`: all matching keys.
+
+### Update
+
+`table.update(key, |row| { ... })` mutates a row in place and updates indices
+only if indexed field values changed. Returns `Some(())` when the key exists,
+otherwise `None`.
