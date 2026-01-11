@@ -2,12 +2,16 @@
 name = "indexed-table"
 version = "0.1.0"
 edition = "2024"
-description = "A tiny in-memory indexed table (skeleton)."
+description = "A tiny in-memory indexed table."
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/jameseperry/indexed-table"
+keywords = ["table", "index", "in-memory"]
+categories = ["data-structures"]
 
 [lib]
 name = "indexed_table"
 path = "src/lib.rs"
 
 [dependencies]
-slotmap = "*"
+slotmap = "1.1"
