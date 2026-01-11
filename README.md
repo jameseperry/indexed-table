@@ -24,10 +24,18 @@ struct Blah {
 }
 
 struct BlahTable {
-    rows: DenseSlotMap<DefaultKey, Blah>,
-    idx_foo: TableIndex<i64>,
-    idx_bar: TableIndex<String>
+    rows: TableRows<Blah>,
+    idx_foo: TableIndex<Blah, i64>,
+    idx_bar: TableIndex<Blah, String>
 }
+```
+
+Example usage:
+
+```rust
+let key = table.insert(Blah { foo: 7, bar: "seven".into() });
+let row = table.rows().get(key).unwrap();
+let found = table.idx_foo().find_one(&7);
 ```
 
 and appropriate update functions.

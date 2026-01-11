@@ -25,7 +25,8 @@ where
         self.map.entry(field).or_default().push(key);
     }
 
-    pub fn find(&self, field: &F) -> Option<Key> {
+    /// Returns the first key for the field, if any (duplicates allowed).
+    pub fn find_one(&self, field: &F) -> Option<Key> {
         self.map.get(field).and_then(|v| v.first().cloned())
     }
 
