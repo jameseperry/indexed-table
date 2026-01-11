@@ -1,0 +1,13 @@
+[package]
+name = "indexed-table"
+version = "0.1.0"
+edition = "2024"
+description = "A tiny in-memory indexed table (skeleton)."
+license = "MIT"
+
+[lib]
+name = "indexed_table"
+path = "src/lib.rs"
+
+[dependencies]
+slotmap = "*"

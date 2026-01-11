@@ -1,0 +1,16 @@
+# Build output
+/target/
+
+# VS Code
+/.vscode/
+
+# JetBrains IDEs
+/.idea/
+
+# Misc
+*.swp
+*.swo
+.DS_Store
+
+# Logs and temporary files
+*.log
